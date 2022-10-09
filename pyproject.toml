@@ -6,8 +6,13 @@ authors = ["yu7400ki <yu7400ki@gmail.com>"]
 readme = "README.md"
 packages = [{include = "atcoder_dumper", from = "src"}]
 
+[tool.poetry.scripts]
+atcoder-dumper = "atcoder_dumper.cli:main"
+
 [tool.poetry.dependencies]
 python = "^3.10"
+GitPython = "^3.1.28"
+fire = "^0.4.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"
