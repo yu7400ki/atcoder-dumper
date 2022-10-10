@@ -38,8 +38,17 @@ def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
 
 
 def filter_submissions(submissions: List[Submission], result: List[str], language: List[str]) -> List[Submission]:
+    def result_filter(submission: Submission) -> bool:
+        if result == []:
+            return True
+        return submission.result in result
 
-    return list(filter(lambda x: x.result in result and x.language in language, submissions))
+    def language_filter(submission: Submission) -> bool:
+        if language == []:
+            return True
+        return submission.language in language
+
+    return list(filter(lambda x: result_filter(x) and language_filter(x), submissions))
 
 
 def fetch_submission_code(contest_id: str, submission_id: int) -> str:
