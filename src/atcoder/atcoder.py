@@ -29,6 +29,18 @@ class Submission:
         self.result = result
         self.execution_time = execution_time
 
+    def fetch_code(self) -> str:
+        url = f"https://atcoder.jp/contests/{self.contest_id}/submissions/{self.id}"
+        response = requests.get(url)
+        html = response.text
+        soup = BeautifulSoup(html, "html.parser")
+        code = soup.select_one("pre#submission-code")
+
+        if code is None:
+            raise Exception("Code not found.")
+
+        return code.text
+
 
 def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
     url = "https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions"
@@ -49,16 +61,3 @@ def filter_submissions(submissions: List[Submission], result: List[str], languag
         return submission.language in language
 
     return list(filter(lambda x: result_filter(x) and language_filter(x), submissions))
-
-
-def fetch_submission_code(contest_id: str, submission_id: int) -> str:
-    url = f"https://atcoder.jp/contests/{contest_id}/submissions/{submission_id}"
-    response = requests.get(url)
-    html = response.text
-    soup = BeautifulSoup(html, "html.parser")
-    code = soup.select_one("pre#submission-code")
-
-    if code is None:
-        raise Exception("Code not found.")
-
-    return code.text
