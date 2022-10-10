@@ -13,6 +13,8 @@ atcoder-dumper = "atcoder_dumper.cli:main"
 python = "^3.10"
 GitPython = "^3.1.28"
 fire = "^0.4.0"
+requests = "^2.28.1"
+beautifulsoup4 = "^4.11.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"
@@ -22,6 +24,7 @@ flake8-builtins = "^1.5.3"
 pre-commit = "^2.20.0"
 pyproject-flake8 = "^5.0.4.post1"
 mypy = "^0.981"
+types-requests = "^2.28.11.2"
 
 [build-system]
 requires = ["poetry-core"]
