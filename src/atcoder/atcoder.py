@@ -37,6 +37,11 @@ def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
     return list(map(lambda x: Submission(**x), response))
 
 
+def filter_submissions(submissions: List[Submission], result: List[str], language: List[str]) -> List[Submission]:
+
+    return list(filter(lambda x: x.result in result and x.language in language, submissions))
+
+
 def fetch_submission_code(contest_id: str, submission_id: int) -> str:
     url = f"https://atcoder.jp/contests/{contest_id}/submissions/{submission_id}"
     response = requests.get(url)
