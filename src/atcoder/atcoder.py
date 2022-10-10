@@ -1,7 +1,12 @@
+import json
+import os
 from typing import List
 
 import requests
 from bs4 import BeautifulSoup
+
+with open(os.path.join(os.path.dirname(__file__), "extensions.json"), mode="r", encoding="UTF-8") as file:
+    extensions = json.load(file)
 
 
 class Submission:
@@ -40,6 +45,12 @@ class Submission:
             raise Exception("Code not found.")
 
         return code.text
+
+    def get_extension(self) -> str:
+        for v in extensions:
+            if self.language.startswith(v):
+                return f".{extensions[v]}"
+        return ""
 
 
 def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
