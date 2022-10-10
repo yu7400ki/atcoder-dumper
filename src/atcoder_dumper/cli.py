@@ -88,10 +88,12 @@ def init() -> None:
 
             json.dump({service: _setting2dict(setting) for service, setting in init_settings.items()}, file, indent=4)
 
+    if not os.path.isfile(".gitignore"):
+        with open(".gitignore", mode="w", encoding="UTF-8") as file:
+            file.write(settings_file)
+
     if not os.path.isdir(".git"):
-        repo = git.Repo.init()
-        repo.git.add(settings_file)
-        repo.index.commit("Initial commit")
+        git.Repo.init()
 
     print("Initialized successfully.")
 
@@ -106,7 +108,7 @@ def dump() -> None:
 
     for submission in tqdm(list(filtered_submissions)):
         _dump_code(submission)
-        time.sleep(1)
+        time.sleep(2)
 
 
 def main() -> None:
