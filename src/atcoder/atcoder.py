@@ -1,6 +1,6 @@
 import json
 import os
-from typing import List
+from typing import Iterable, List
 
 import requests
 from bs4 import BeautifulSoup
@@ -60,7 +60,7 @@ def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
     return list(map(lambda x: Submission(**x), response))
 
 
-def filter_submissions(submissions: List[Submission], result: List[str], language: List[str]) -> filter:
+def filter_submissions(submissions: List[Submission], result: List[str], language: List[str]) -> Iterable[Submission]:
     def result_filter(submission: Submission) -> bool:
         if result == []:
             return True
