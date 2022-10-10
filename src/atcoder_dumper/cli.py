@@ -11,7 +11,7 @@ services = ["atcoder.jp"]
 settings_file = "settings.json"
 
 
-class Filter:
+class SubmissionFilter:
     def __init__(self, result: List[str] = [], language: List[str] = []) -> None:
         self.result: List[str] = result
         self.language: List[str] = language
@@ -21,7 +21,7 @@ class Setting:
     def __init__(
         self,
         username: str,
-        filter: Filter = Filter(),  # noqa
+        filter: SubmissionFilter = SubmissionFilter(),  # noqa
     ):
         self.username = username
         self.filter = filter
