@@ -30,9 +30,9 @@ class Submission:
         self.execution_time = execution_time
 
 
-def fetch_submissions(user: str) -> List[Submission]:
+def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
     url = "https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions"
-    payload = {"user": user, "from_second": "0"}
+    payload = {"user": user, "from_second": f"{epoch_second}"}
     response = requests.get(url, params=payload).json()
     return list(map(lambda x: Submission(**x), response))
 

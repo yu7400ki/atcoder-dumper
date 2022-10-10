@@ -29,3 +29,4 @@ repos:
     hooks:
       - id: mypy
         entry: mypy
+        additional_dependencies: ['types-requests']
