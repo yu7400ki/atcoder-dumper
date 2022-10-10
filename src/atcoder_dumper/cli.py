@@ -5,6 +5,8 @@ from typing import Dict, List
 import git
 from fire import Fire
 
+from atcoder import atcoder
+
 services = ["atcoder.jp"]
 settings_file = "settings.json"
 
@@ -14,7 +16,7 @@ class Setting:
         self,
         service: str,
         username: str = "",
-        filter: Dict[str, List[str]] = {"status": [], "filter": []},  # noqa
+        filter: Dict[str, List[str]] = {"result": [], "filter": []},  # noqa
     ):
         self.service = service
         self.username = username
@@ -53,5 +55,16 @@ def init() -> None:
         repo.index.commit("Initial commit")
 
 
+def dump() -> None:
+    """Dump your submissions."""
+
+    setting: Setting = _load_settings()["atcoder.jp"]
+
+    submissions = atcoder.fetch_submissions(setting.username)
+
+    for submission in submissions:
+        print(submission.problem_id)
+
+
 def main() -> None:
-    Fire({"init": init})
+    Fire({"init": init, "dump": dump})
