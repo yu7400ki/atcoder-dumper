@@ -20,18 +20,15 @@ class Filter:
 class Setting:
     def __init__(
         self,
-        service: str,
         username: str,
         filter: Filter = Filter(),  # noqa
     ):
-        self.service = service
         self.username = username
         self.filter = filter
 
 
 def _setting2json(setting: Setting) -> Dict[str, str | Dict[str, List[str]]]:
     return {
-        "service": setting.service,
         "username": setting.username,
         "filter": {
             "result": setting.filter.result,
@@ -60,7 +57,7 @@ def init() -> None:
         with open(settings_file, mode="w", encoding="UTF-8") as file:
             for service in services:
                 username = input(f"Please enter your {service} username: ")
-                init_settings[service] = Setting(service, username)
+                init_settings[service] = Setting(username)
 
             json.dump({service: _setting2json(setting) for service, setting in init_settings.items()}, file, indent=4)
 
