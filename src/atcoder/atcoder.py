@@ -60,7 +60,7 @@ def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
     return list(map(lambda x: Submission(**x), response))
 
 
-def filter_submissions(submissions: List[Submission], result: List[str], language: List[str]) -> List[Submission]:
+def filter_submissions(submissions: List[Submission], result: List[str], language: List[str]) -> filter:
     def result_filter(submission: Submission) -> bool:
         if result == []:
             return True
@@ -71,4 +71,4 @@ def filter_submissions(submissions: List[Submission], result: List[str], languag
             return True
         return submission.language in language
 
-    return list(filter(lambda x: result_filter(x) and language_filter(x), submissions))
+    return filter(lambda x: result_filter(x) and language_filter(x), submissions)
