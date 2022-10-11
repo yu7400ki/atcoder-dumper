@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "atcoder-dumper"
 version = "0.1.0"
-description = ""
+description = "ユーザー名・結果・言語を指定して、AtCoderに提出したコードを保存し、コミットするCUIツールです。"
 authors = ["yu7400ki <yu7400ki@gmail.com>"]
 readme = "README.md"
+license = "MIT"
 packages = [{include = "atcoder_dumper", from = "src"}, {include = "atcoder", from = "src"}]
 
 [tool.poetry.scripts]
