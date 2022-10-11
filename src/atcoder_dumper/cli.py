@@ -114,6 +114,9 @@ def dump() -> None:
 
     setting: Setting = _load_settings()["atcoder.jp"]
 
+    if not os.path.isdir(".git"):
+        raise NotADirectoryError("This directory is not a git repository.\nPlease run `git init` first.")
+
     submissions = atcoder.fetch_submissions(setting.username)
     filtered_submissions = atcoder.filter_submissions(submissions, setting.filter.result, setting.filter.language)
 
