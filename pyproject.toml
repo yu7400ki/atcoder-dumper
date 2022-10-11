@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["yu7400ki <yu7400ki@gmail.com>"]
 readme = "README.md"
-packages = [{include = "atcoder_dumper", from = "src"}]
+packages = [{include = "atcoder_dumper", from = "src"}, {include = "atcoder", from = "src"}]
 
 [tool.poetry.scripts]
 atcoder-dumper = "atcoder_dumper.cli:main"
