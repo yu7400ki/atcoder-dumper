@@ -96,7 +96,9 @@ def init() -> None:
             file.write(settings_file)
 
     if not os.path.isdir(".git"):
-        git.Repo.init()
+        repo = git.Repo.init()
+        repo.git.add(".")
+        repo.git.commit("-m", "Initial commit")
 
     print("Initialized successfully.")
 
