@@ -73,6 +73,12 @@ def _dump_code(submission: atcoder.Submission) -> None:
     with open(file_path, mode="w", encoding="UTF-8", newline="") as f:
         f.write(code)
 
+    repo = git.Repo(".")
+    repo.git.add(file_path)
+    title = f"Add {language} code for {contest_id}/{problem_id}"
+    description = json.dumps(submission.__dict__, indent=4)
+    repo.git.commit("-m", title, "-m", description)
+
 
 def init() -> None:
     """Initialize the directory for the first time."""
