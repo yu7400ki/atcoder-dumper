@@ -79,7 +79,7 @@ def _dump_code(submission: atcoder.Submission) -> None:
     description = json.dumps(submission.__dict__, indent=4)
     try:
         repo.git.commit("-m", title, "-m", description, "--date", submission.epoch_second)
-        repo.git.rebase("HEAD^", "--committer-date-is-author-date")
+        repo.git.rebase("HEAD~1", "--committer-date-is-author-date")
     except git.GitCommandError:
         pass
 
