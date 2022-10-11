@@ -130,8 +130,8 @@ def init() -> None:
 
     if not os.path.isdir(".git"):
         repo = git.Repo.init()
-        repo.git.add(".")
-        repo.git.commit("-m", "Initial commit")
+        repo.index.add([".gitignore"])
+        repo.index.commit("Add .gitignore")
 
     print("Initialized successfully.")
 
