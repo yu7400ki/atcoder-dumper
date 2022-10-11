@@ -77,8 +77,11 @@ def _dump_code(submission: atcoder.Submission) -> None:
     repo.git.add(file_path)
     title = f"Add {language} code for {contest_id}/{problem_id}"
     description = json.dumps(submission.__dict__, indent=4)
-    repo.git.commit("-m", title, "-m", description, "--date", submission.epoch_second)
-    repo.git.rebase("HEAD^", "--committer-date-is-author-date")
+    try:
+        repo.git.commit("-m", title, "-m", description, "--date", submission.epoch_second)
+        repo.git.rebase("HEAD^", "--committer-date-is-author-date")
+    except git.GitCommandError:
+        pass
 
 
 def _extract_desc_from_commit(commit: str) -> str:
@@ -152,7 +155,9 @@ def dump() -> None:
 
     for submission in tqdm(list(filtered_submissions)):
         _dump_code(submission)
-        time.sleep(2)
+        time.sleep(1.5)
+
+    print("Dumped successfully.")
 
 
 def main() -> None:
