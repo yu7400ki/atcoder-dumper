@@ -81,6 +81,29 @@ def _dump_code(submission: atcoder.Submission) -> None:
     repo.git.rebase("HEAD^", "--committer-date-is-author-date")
 
 
+def _extract_desc_from_commit(commit: str) -> str:
+    try:
+        return "".join(commit.split("\n")[2:])
+    except IndexError:
+        return ""
+
+
+def _load_latest_submission_commit() -> atcoder.Submission:
+    repo = git.Repo(".")
+    for commit in repo.iter_commits():
+        desc = _extract_desc_from_commit(str(commit.message))
+        if desc != "":
+            try:
+                info = json.loads(desc)
+                return atcoder.Submission(**info)
+            except json.JSONDecodeError:
+                continue
+            except TypeError:
+                continue
+
+    raise ValueError("No submission found.")
+
+
 def init() -> None:
     """Initialize the directory for the first time."""
 
@@ -118,7 +141,13 @@ def dump() -> None:
     if not os.path.isdir(".git"):
         raise NotADirectoryError("This directory is not a git repository.\nPlease run `git init` first.")
 
-    submissions = atcoder.fetch_submissions(setting.username)
+    try:
+        latest_submission = _load_latest_submission_commit()
+        epoch_time = latest_submission.epoch_second + 1
+    except ValueError:
+        epoch_time = 0
+
+    submissions = atcoder.fetch_submissions(setting.username, epoch_time)
     filtered_submissions = atcoder.filter_submissions(submissions, setting.filter.result, setting.filter.language)
 
     for submission in tqdm(list(filtered_submissions)):
