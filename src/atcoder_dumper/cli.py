@@ -77,7 +77,8 @@ def _dump_code(submission: atcoder.Submission) -> None:
     repo.git.add(file_path)
     title = f"Add {language} code for {contest_id}/{problem_id}"
     description = json.dumps(submission.__dict__, indent=4)
-    repo.git.commit("-m", title, "-m", description)
+    repo.git.commit("-m", title, "-m", description, "--date", submission.epoch_second)
+    repo.git.rebase("HEAD^", "--committer-date-is-author-date")
 
 
 def init() -> None:
