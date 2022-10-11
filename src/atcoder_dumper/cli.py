@@ -50,6 +50,9 @@ def _dict2setting(setting: Dict[str, str | Dict[str, List[str]]]) -> Setting:
 
 
 def _load_settings() -> Dict[str, Setting]:
+    if not os.path.isfile(settings_file):
+        raise FileNotFoundError(f"{settings_file} is not found.\nPlease run `atcoder-dumper init` first.")
+
     with open(settings_file, mode="r", encoding="UTF-8") as file:
         settings = json.load(file)
 
