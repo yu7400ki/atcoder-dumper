@@ -6,6 +6,12 @@
 
 GitとPythonが使用可能なことが前提です。
 
+## インストール方法
+
+```
+pip install git+https://github.com/yu7400ki/atcoder-dumper.git
+```
+
 ## 使い方
 
 使用可能なコマンド
