@@ -144,6 +144,9 @@ def dump() -> None:
     if not os.path.isdir(".git"):
         raise NotADirectoryError("This directory is not a git repository.\nPlease run `git init` first.")
 
+    if setting.username == "":
+        raise ValueError("Username is empty.\nPlease set your username in settings.json.")
+
     try:
         latest_submission = _load_latest_submission_commit()
         epoch_time = latest_submission.epoch_second + 1
