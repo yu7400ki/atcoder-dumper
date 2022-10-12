@@ -5,7 +5,7 @@ description = "ユーザー名・結果・言語を指定して、AtCoderに提�
 authors = ["yu7400ki <yu7400ki@gmail.com>"]
 readme = "README.md"
 license = "MIT"
-packages = [{include = "atcoder_dumper", from = "src"}, {include = "atcoder", from = "src"}]
+packages = [{include = "atcoder_dumper", from = "src"}]
 
 [tool.poetry.scripts]
 atcoder-dumper = "atcoder_dumper.cli:main"

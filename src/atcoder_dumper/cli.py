@@ -7,7 +7,7 @@ import git
 from fire import Fire
 from tqdm import tqdm
 
-from atcoder import atcoder
+from atcoder_dumper import atcoder
 
 services = ["atcoder.jp"]
 settings_file = "settings.json"
