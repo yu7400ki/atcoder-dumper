@@ -46,7 +46,7 @@
     "Text": "txt",
     "Ada": "ada",
     "Awk": "awk",
-    "C++": "c++",
+    "C++": "cpp",
     "Lua": "lua",
     "Nim": "nim",
     "PHP": "php",
