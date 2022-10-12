@@ -9,21 +9,16 @@ from fire import Fire
 from tqdm import tqdm
 
 from atcoder_dumper import atcoder
+from atcoder_dumper.atcoder import AtCoder
 
 services = ["atcoder.jp"]
 settings_file = "settings.json"
 
 
 @dataclass
-class SubmissionFilter:
-    result: List[str]
-    language: List[str]
-
-
-@dataclass
 class Setting:
     username: str
-    filter: SubmissionFilter  # noqa
+    filter: atcoder.SubmissionFilter  # noqa
 
     def toDict(self) -> Dict[str, str | Dict[str, List[str]]]:
         return {"username": self.username, "filter": self.filter.__dict__}
@@ -35,7 +30,7 @@ class Setting:
 
         return cls(
             username=setting["username"],
-            filter=SubmissionFilter(**setting["filter"]),
+            filter=atcoder.SubmissionFilter(**setting["filter"]),
         )
 
 
@@ -110,7 +105,7 @@ def init() -> None:
         with open(settings_file, mode="w", encoding="UTF-8") as file:
             for service in services:
                 username = input(f"Please enter your {service} username: ")
-                init_settings[service] = Setting(username, SubmissionFilter([], []))
+                init_settings[service] = Setting(username, atcoder.SubmissionFilter([], []))
 
             json.dump({service: Setting.toDict(setting) for service, setting in init_settings.items()}, file, indent=4)
 
@@ -143,8 +138,13 @@ def dump() -> None:
     except ValueError:
         epoch_time = 0
 
-    submissions = atcoder.fetch_submissions(setting.username, epoch_time)
-    filtered_submissions = atcoder.filter_submissions(submissions, setting.filter.result, setting.filter.language)
+    user = AtCoder(setting.username)
+    user.fetch_submissions(epoch_time)
+    filtered_submissions = list(user.filter_submissions(setting.filter))
+
+    if len(filtered_submissions) == 0:
+        print("No new submissions found.")
+        return
 
     for submission in tqdm(list(filtered_submissions)):
         _dump_code(submission)

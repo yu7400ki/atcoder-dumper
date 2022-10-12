@@ -1,3 +1,4 @@
+import dataclasses
 import json
 import os
 from dataclasses import dataclass
@@ -42,22 +43,34 @@ class Submission:
         return ""
 
 
-def fetch_submissions(user: str, epoch_second: int = 0) -> List[Submission]:
-    url = "https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions"
-    payload = {"user": user, "from_second": f"{epoch_second}"}
-    response = requests.get(url, params=payload).json()
-    return list(map(lambda x: Submission(**x), response))
+@dataclass
+class SubmissionFilter:
+    result: List[str]
+    language: List[str]
 
 
-def filter_submissions(submissions: List[Submission], result: List[str], language: List[str]) -> Iterable[Submission]:
-    def result_filter(submission: Submission) -> bool:
-        if result == []:
-            return True
-        return submission.result in result
+@dataclass
+class AtCoder:
+    username: str
+    submissions: List[Submission] = dataclasses.field(default_factory=list, init=False)
 
-    def language_filter(submission: Submission) -> bool:
-        if language == []:
-            return True
-        return submission.language in language
+    def fetch_submissions(self, epoch_second: int) -> List[Submission]:
+        url = "https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions"
+        payload = {"user": self.username, "from_second": f"{epoch_second}"}
+        response = requests.get(url, params=payload).json()
+        result = list(map(lambda x: Submission(**x), response))
+        self.submissions = result
+        return result
 
-    return filter(lambda x: result_filter(x) and language_filter(x), submissions)
+    def filter_submissions(self, submission_filter: SubmissionFilter) -> Iterable[Submission]:
+        def result_filter(x: Submission) -> bool:
+            if submission_filter.result == []:
+                return True
+            return x.result in submission_filter.result
+
+        def language_filter(x: Submission) -> bool:
+            if submission_filter.language == []:
+                return True
+            return x.language in submission_filter.language
+
+        return filter(result_filter, filter(language_filter, self.submissions))
