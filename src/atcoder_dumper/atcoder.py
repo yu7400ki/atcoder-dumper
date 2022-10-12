@@ -1,5 +1,6 @@
 import json
 import os
+from dataclasses import dataclass
 from typing import Iterable, List
 
 import requests
@@ -9,30 +10,18 @@ with open(os.path.join(os.path.dirname(__file__), "extensions.json"), mode="r", 
     extensions = json.load(file)
 
 
+@dataclass
 class Submission:
-    def __init__(
-        self,
-        id: int,  # noqa
-        epoch_second: int,
-        problem_id: str,
-        contest_id: str,
-        user_id: str,
-        language: str,
-        point: float,
-        length: int,
-        result: str,
-        execution_time: int,
-    ) -> None:
-        self.id = id
-        self.epoch_second = epoch_second
-        self.problem_id = problem_id
-        self.contest_id = contest_id
-        self.user_id = user_id
-        self.language = language
-        self.point = point
-        self.length = length
-        self.result = result
-        self.execution_time = execution_time
+    id: int  # noqa
+    epoch_second: int
+    problem_id: str
+    contest_id: str
+    user_id: str
+    language: str
+    point: float
+    length: int
+    result: str
+    execution_time: int
 
     def fetch_code(self) -> str:
         url = f"https://atcoder.jp/contests/{self.contest_id}/submissions/{self.id}"

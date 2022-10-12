@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from dataclasses import dataclass
 from typing import Dict, List
 
 import git
@@ -13,40 +14,29 @@ services = ["atcoder.jp"]
 settings_file = "settings.json"
 
 
+@dataclass
 class SubmissionFilter:
-    def __init__(self, result: List[str] = [], language: List[str] = []) -> None:
-        self.result: List[str] = result
-        self.language: List[str] = language
+    result: List[str]
+    language: List[str]
 
 
+@dataclass
 class Setting:
-    def __init__(
-        self,
-        username: str,
-        filter: SubmissionFilter = SubmissionFilter(),  # noqa
-    ):
-        self.username = username
-        self.filter = filter
+    username: str
+    filter: SubmissionFilter  # noqa
 
+    def toDict(self) -> Dict[str, str | Dict[str, List[str]]]:
+        return {"username": self.username, "filter": self.filter.__dict__}
 
-def _setting2dict(setting: Setting) -> Dict[str, str | Dict[str, List[str]]]:
-    return {
-        "username": setting.username,
-        "filter": {
-            "result": setting.filter.result,
-            "language": setting.filter.language,
-        },
-    }
+    @classmethod
+    def toSetting(cls, setting: Dict[str, str | Dict[str, List[str]]]) -> "Setting":
+        assert isinstance(setting["username"], str)
+        assert isinstance(setting["filter"], dict)
 
-
-def _dict2setting(setting: Dict[str, str | Dict[str, List[str]]]) -> Setting:
-    assert isinstance(setting["username"], str)
-    assert isinstance(setting["filter"], dict)
-
-    return Setting(
-        str(setting["username"]),
-        SubmissionFilter(**setting["filter"]),
-    )
+        return cls(
+            username=setting["username"],
+            filter=SubmissionFilter(**setting["filter"]),
+        )
 
 
 def _load_settings() -> Dict[str, Setting]:
@@ -56,7 +46,7 @@ def _load_settings() -> Dict[str, Setting]:
     with open(settings_file, mode="r", encoding="UTF-8") as file:
         settings = json.load(file)
 
-    return {service: _dict2setting(setting) for service, setting in settings.items()}
+    return {service: Setting.toSetting(setting) for service, setting in settings.items()}
 
 
 def _dump_code(submission: atcoder.Submission) -> None:
@@ -120,9 +110,9 @@ def init() -> None:
         with open(settings_file, mode="w", encoding="UTF-8") as file:
             for service in services:
                 username = input(f"Please enter your {service} username: ")
-                init_settings[service] = Setting(username)
+                init_settings[service] = Setting(username, SubmissionFilter([], []))
 
-            json.dump({service: _setting2dict(setting) for service, setting in init_settings.items()}, file, indent=4)
+            json.dump({service: Setting.toDict(setting) for service, setting in init_settings.items()}, file, indent=4)
 
     if not os.path.isfile(".gitignore"):
         with open(".gitignore", mode="w", encoding="UTF-8") as file:
