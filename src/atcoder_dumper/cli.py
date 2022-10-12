@@ -2,6 +2,7 @@ import json
 import os
 import time
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Dict, List
 
 import git
@@ -48,6 +49,8 @@ def _dump_code(submission: atcoder.Submission) -> None:
     language = submission.language
     contest_id = submission.contest_id
     problem_id = submission.problem_id
+    result = submission.result
+    epoch_second = submission.epoch_second
     code = submission.fetch_code()
     extension = submission.get_extension()
 
@@ -60,10 +63,10 @@ def _dump_code(submission: atcoder.Submission) -> None:
 
     repo = git.Repo(".")
     repo.git.add(file_path)
-    title = f"Add {language} code for {contest_id}/{problem_id}"
+    title = f"[{result}] {contest_id}/{problem_id} {language} at {datetime.fromtimestamp(epoch_second)}"
     description = json.dumps(submission.__dict__, indent=4)
     try:
-        repo.git.commit("-m", title, "-m", description, "--date", submission.epoch_second)
+        repo.git.commit("-m", title, "-m", description, "--date", epoch_second)
         repo.git.rebase("HEAD~1", "--committer-date-is-author-date")
     except git.GitCommandError:
         pass
